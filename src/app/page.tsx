@@ -1,9 +1,7 @@
-import { getCars } from "@/lib/api";
 import HomeClient from "@/components/home/HomeClient";
 
-export default async function Home() {
-  const importCars = await getCars("Chine");
-  const stockCars = await getCars("Algérie");
-
-  return <HomeClient importCars={importCars} stockCars={stockCars} />;
+export default function Home() {
+  // Don't fetch at build time - let HomeClient fetch on the client side
+  // This allows the build to succeed without the backend being available
+  return <HomeClient />;
 }

@@ -3,6 +3,56 @@ import { Car, Command, CommandRequest } from "@/types";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://10.1.1.101:8000/api";
 const USE_MOCK = false; // Set to false to use real API
 
+const MOCK_CARS: Car[] = [
+    {
+        id: 1,
+        model: "Mock Car",
+        year: 2023,
+        color: "Black",
+        transmission: "Automatic",
+        fuelType: "Gasoline",
+        engine: "2.0L",
+        mileage: 10000,
+        price: 25000,
+        delivery_price: 500,
+        features: [],
+        isAvailable: 1,
+        location: "Algiers",
+        brand_id: 1,
+        brand: { id: 1, name: "Mock Brand" },
+        images: [],
+    }
+];
+
+const MOCK_COMMANDS: { [key: string]: Command } = {
+    "CMD123": {
+        id: 1,
+        commandNumber: "CMD123",
+        client_id: 1,
+        car_model_id: 1,
+        status: "Pending",
+        totalPrice: 25500,
+        deposit: 5000,
+        price: 25000,
+        delivery_price: 500,
+        paymentStatus: "Pending",
+        comments: null,
+        deliveredAt: null,
+        container_id: null,
+        client: {
+            id: 1,
+            firstName: "John",
+            lastName: "Doe",
+            phoneNumber: "123456789",
+            address: "123 Mock Street",
+            email: "john.doe@example.com",
+            wilaya: "Algiers",
+        },
+        car_model: MOCK_CARS[0],
+        container: null,
+    }
+};
+
 export async function createCommand(data: CommandRequest): Promise<void> {
     if (USE_MOCK) {
         await new Promise(resolve => setTimeout(resolve, 1500));

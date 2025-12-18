@@ -3,25 +3,60 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getCars } from "@/lib/api";
+import { Car } from "@/types";
 import { CarCard } from "@/components/cars/CarCard";
-import { ArrowRight, Shield, Zap, Globe, Car } from "lucide-react";
+import { CarCardSkeleton } from "@/components/cars/CarCardSkeleton";
+import { ArrowRight, Shield, Zap, Globe, Car as CarIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+interface HomeClientProps {
+    importCars?: Car[];
+    stockCars?: Car[];
+}
+
 export default function HomeClient({
-    importCars,
-    stockCars
-}: {
-    importCars: Awaited<ReturnType<typeof getCars>>,
-    stockCars: Awaited<ReturnType<typeof getCars>>
-}) {
-    const featuredImportCars = importCars.slice(0, 3);
-    const featuredStockCars = stockCars.slice(0, 3);
+    importCars: initialImportCars,
+    stockCars: initialStockCars
+}: HomeClientProps) {
+    const [importCars, setImportCars] = useState<Car[]>(initialImportCars || []);
+    const [stockCars, setStockCars] = useState<Car[]>(initialStockCars || []);
+    const [loadingImport, setLoadingImport] = useState(!initialImportCars);
+    const [loadingStock, setLoadingStock] = useState(!initialStockCars);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         setIsVisible(true);
-    }, []);
+
+        // Fetch import cars if not provided
+        if (!initialImportCars) {
+            getCars("Chine")
+                .then((data) => {
+                    setImportCars(data);
+                    setLoadingImport(false);
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch import cars:", err);
+                    setLoadingImport(false);
+                });
+        }
+
+        // Fetch stock cars if not provided
+        if (!initialStockCars) {
+            getCars("Algérie")
+                .then((data) => {
+                    setStockCars(data);
+                    setLoadingStock(false);
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch stock cars:", err);
+                    setLoadingStock(false);
+                });
+        }
+    }, [initialImportCars, initialStockCars]);
+
+    const featuredImportCars = importCars.slice(0, 3);
+    const featuredStockCars = stockCars.slice(0, 3);
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
@@ -143,7 +178,17 @@ export default function HomeClient({
                         <p className="text-muted-foreground max-w-2xl mx-auto">Découvrez quelques-uns de nos véhicules premium disponibles à l'importation.</p>
                     </div>
 
-                    {featuredImportCars.length > 0 ? (
+                    {/* Loading State */}
+                    {loadingImport && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                            {[...Array(3)].map((_, i) => (
+                                <CarCardSkeleton key={i} />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Cars Grid - only show when not loading */}
+                    {!loadingImport && featuredImportCars.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                             {featuredImportCars.map((car, idx) => (
                                 <div
@@ -155,10 +200,13 @@ export default function HomeClient({
                                 </div>
                             ))}
                         </div>
-                    ) : (
+                    )}
+
+                    {/* Empty State - only show when not loading and no cars */}
+                    {!loadingImport && featuredImportCars.length === 0 && (
                         <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm mb-12 animate-fade-in">
                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-50 mb-6">
-                                <Car className="h-10 w-10 text-gray-300" />
+                                <CarIcon className="h-10 w-10 text-gray-300" />
                             </div>
                             <h3 className="text-xl font-bold text-secondary mb-3">Aucun véhicule disponible</h3>
                             <p className="text-muted-foreground max-w-md mx-auto">
@@ -197,7 +245,17 @@ export default function HomeClient({
                         </p>
                     </div>
 
-                    {featuredStockCars.length > 0 ? (
+                    {/* Loading State */}
+                    {loadingStock && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                            {[...Array(3)].map((_, i) => (
+                                <CarCardSkeleton key={i} />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Cars Grid - only show when not loading */}
+                    {!loadingStock && featuredStockCars.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                             {featuredStockCars.map((car, idx) => (
                                 <div
@@ -209,10 +267,13 @@ export default function HomeClient({
                                 </div>
                             ))}
                         </div>
-                    ) : (
+                    )}
+
+                    {/* Empty State - only show when not loading and no cars */}
+                    {!loadingStock && featuredStockCars.length === 0 && (
                         <div className="text-center py-16 bg-gray-50 rounded-3xl border border-gray-100 shadow-sm mb-12 animate-fade-in">
                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white mb-6">
-                                <Car className="h-10 w-10 text-gray-300" />
+                                <CarIcon className="h-10 w-10 text-gray-300" />
                             </div>
                             <h3 className="text-xl font-bold text-secondary mb-3">Stock épuisé</h3>
                             <p className="text-muted-foreground max-w-md mx-auto">

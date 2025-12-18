@@ -47,7 +47,7 @@ export function Navbar() {
                 <div className="flex justify-between items-center">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <Logo className="h-10 w-auto transition-transform group-hover:scale-105" />
+                        <Logo size="large" className="transition-transform group-hover:scale-105" />
                     </Link>
 
                     {/* Desktop Navigation */}

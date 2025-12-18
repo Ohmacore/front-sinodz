@@ -1,33 +1,56 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { CarCard } from "@/components/cars/CarCard";
+import { CarCardSkeleton } from "@/components/cars/CarCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Car } from "@/types";
+import { getCars } from "@/lib/api";
 
 interface CarsClientProps {
-    cars: Car[];
+    cars?: Car[];
+    location?: string;
     pageTitle?: string;
     pageDescription?: string;
     emptyMessage?: string;
 }
 
 export default function CarsClient({
-    cars,
+    cars: initialCars,
+    location,
     pageTitle = "Notre Catalogue",
     pageDescription = "Parcourez notre inventaire complet de véhicules premium disponibles à l'importation",
     emptyMessage = "Aucun véhicule ne correspond à vos critères"
 }: CarsClientProps) {
+    const [cars, setCars] = useState<Car[]>(initialCars || []);
+    const [loading, setLoading] = useState(!initialCars);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedBrand, setSelectedBrand] = useState<string>("all");
     const [selectedFuelType, setSelectedFuelType] = useState<string>("all");
     const [selectedTransmission, setSelectedTransmission] = useState<string>("all");
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000000]);
     const [showFilters, setShowFilters] = useState(true);
+
+    // Fetch cars on client side if not provided via props
+    useEffect(() => {
+        if (!initialCars) {
+            getCars(location)
+                .then((data) => {
+                    setCars(data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch cars:", err);
+                    setError("Impossible de charger les véhicules. Veuillez réessayer.");
+                    setLoading(false);
+                });
+        }
+    }, [initialCars, location]);
 
     // Extract unique values for filters
     const brands = useMemo(() => {
@@ -46,6 +69,7 @@ export default function CarsClient({
     }, [cars]);
 
     const maxPrice = useMemo(() => {
+        if (cars.length === 0) return 1000000000;
         return Math.max(...cars.map(car => car.price));
     }, [cars]);
 
@@ -202,7 +226,13 @@ export default function CarsClient({
                     <div className="lg:col-span-3">
                         <div className="mb-6 flex items-center justify-between">
                             <p className="text-muted-foreground">
-                                <span className="font-semibold text-secondary">{filteredCars.length}</span> véhicule{filteredCars.length !== 1 ? 's' : ''} trouvé{filteredCars.length !== 1 ? 's' : ''}
+                                {loading ? (
+                                    <span className="text-secondary">Chargement...</span>
+                                ) : (
+                                    <>
+                                        <span className="font-semibold text-secondary">{filteredCars.length}</span> véhicule{filteredCars.length !== 1 ? 's' : ''} trouvé{filteredCars.length !== 1 ? 's' : ''}
+                                    </>
+                                )}
                             </p>
                             <Button
                                 variant="outline"
@@ -215,13 +245,42 @@ export default function CarsClient({
                             </Button>
                         </div>
 
-                        {filteredCars.length > 0 ? (
+                        {/* Loading State with Skeletons */}
+                        {loading && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {[...Array(6)].map((_, i) => (
+                                    <CarCardSkeleton key={i} />
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Error State */}
+                        {!loading && error && (
+                            <Card className="border-red-200 bg-red-50">
+                                <CardContent className="p-12 text-center">
+                                    <p className="text-red-600 mb-4">{error}</p>
+                                    <Button
+                                        onClick={() => window.location.reload()}
+                                        variant="outline"
+                                        className="border-2 border-red-300 text-red-600 hover:bg-red-100"
+                                    >
+                                        Réessayer
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        )}
+
+                        {/* Cars Grid */}
+                        {!loading && !error && filteredCars.length > 0 && (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {filteredCars.map((car) => (
                                     <CarCard key={car.id} car={car} />
                                 ))}
                             </div>
-                        ) : (
+                        )}
+
+                        {/* Empty State */}
+                        {!loading && !error && filteredCars.length === 0 && (
                             <Card className="border-gray-200">
                                 <CardContent className="p-12 text-center">
                                     <p className="text-muted-foreground mb-4">{emptyMessage}</p>

@@ -1,6 +1,7 @@
 import { ShipIcon } from "../icons/ShipIcon";
+import { cn } from "@/lib/utils";
 
-export function Logo({ size = "default" }: { size?: "small" | "default" | "large" }) {
+export function Logo({ size = "default", className }: { size?: "small" | "default" | "large", className?: string }) {
     const sizes = {
         small: { text: "text-lg", subtext: "text-[10px]", icon: "h-5 w-5" },
         default: { text: "text-2xl", subtext: "text-xs", icon: "h-7 w-7" },
@@ -10,7 +11,7 @@ export function Logo({ size = "default" }: { size?: "small" | "default" | "large
     const s = sizes[size];
 
     return (
-        <div className="flex items-center gap-3">
+        <div className={cn("flex items-center gap-3", className)}>
             <div className="relative">
                 <ShipIcon className={`${s.icon} text-primary`} />
             </div>
