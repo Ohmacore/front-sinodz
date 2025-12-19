@@ -24,8 +24,8 @@
   --color-muted: #F5F5F5;
   --color-muted-foreground: #6B7280;
 
-  --color-accent: #DC2626;
-  --color-accent-foreground: #FFFFFF;
+  --color-accent: #E5E7EB;
+  --color-accent-foreground: #6B7280;
 
   --color-destructive: #DC2626;
   --color-destructive-foreground: #FFFFFF;
@@ -55,9 +55,9 @@
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96%;
     --muted-foreground: 220 9% 46%;
-    --accent: 0 84% 51%;
-    /* Red */
-    --accent-foreground: 0 0% 100%;
+    --accent: 220 13% 91%;
+    /* Gray */
+    --accent-foreground: 220 9% 46%;
     --destructive: 0 84% 51%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 91%;

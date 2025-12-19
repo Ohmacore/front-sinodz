@@ -256,13 +256,13 @@ export default function CarsClient({
 
                         {/* Error State */}
                         {!loading && error && (
-                            <Card className="border-red-200 bg-red-50">
+                            <Card className="border-gray-300 bg-gray-50">
                                 <CardContent className="p-12 text-center">
-                                    <p className="text-red-600 mb-4">{error}</p>
+                                    <p className="text-gray-600 mb-4">{error}</p>
                                     <Button
                                         onClick={() => window.location.reload()}
                                         variant="outline"
-                                        className="border-2 border-red-300 text-red-600 hover:bg-red-100"
+                                        className="border-2 border-gray-400 text-gray-700 hover:bg-gray-100"
                                     >
                                         Réessayer
                                     </Button>
