@@ -73,9 +73,8 @@ export async function createCommand(data: CommandRequest): Promise<void> {
 
 // Helper function to transform image URLs from API
 const transformCarImages = (car: Car): Car => {
-    // Use environment variable or fallback to localhost
-    // For production or network access, set NEXT_PUBLIC_STORAGE_URL to your server's IP
-    const STORAGE_BASE_URL = "/storage/proxy";
+    // Use direct backend storage URL for images (not proxy) so Next.js Image optimization works
+    const STORAGE_BASE_URL = process.env.NEXT_PUBLIC_STORAGE_URL || "https://sinodz-backend.ohmacore.cloud/storage";
 
     return {
         ...car,
