@@ -1,6 +1,6 @@
 import { Car, Command, CommandRequest } from "@/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://10.1.1.101:8000/api";
+const API_BASE_URL = "/api/proxy";
 const USE_MOCK = false; // Set to false to use real API
 
 const MOCK_CARS: Car[] = [
@@ -75,7 +75,7 @@ export async function createCommand(data: CommandRequest): Promise<void> {
 const transformCarImages = (car: Car): Car => {
     // Use environment variable or fallback to localhost
     // For production or network access, set NEXT_PUBLIC_STORAGE_URL to your server's IP
-    const STORAGE_BASE_URL = process.env.NEXT_PUBLIC_STORAGE_URL || "http://127.0.0.1:8000/storage";
+    const STORAGE_BASE_URL = "/storage/proxy";
 
     return {
         ...car,

@@ -15,11 +15,33 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        // Proxy API calls to avoid CORS issues
+        source: "/api/proxy/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL || "http://10.1.1.101:8000/api"}/:path*`,
+      },
+      {
+        // Proxy storage calls to avoid CORS issues
+        source: "/storage/proxy/:path*",
+        destination: `${process.env.NEXT_PUBLIC_STORAGE_URL || "http://10.1.1.101:8000/storage"}/:path*`,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "sinodz-backend.ohmacore.cloud",
+      },
+      {
+        protocol: "http",
+        hostname: "sinodz-backend.ohmacore.cloud",
       },
       {
         protocol: "http",

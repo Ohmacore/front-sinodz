@@ -102,7 +102,7 @@ export function OrderForm({ carModel, carPrice, carId }: OrderFormProps) {
                                 onChange={handleChange}
                                 required
                                 className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                                placeholder="Jean"
+                                placeholder="votre prénom"
                             />
                         </div>
                         <div className="space-y-2">
@@ -114,7 +114,7 @@ export function OrderForm({ carModel, carPrice, carId }: OrderFormProps) {
                                 onChange={handleChange}
                                 required
                                 className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                                placeholder="Dupont"
+                                placeholder="votre nom"
                             />
                         </div>
                     </div>
@@ -129,7 +129,7 @@ export function OrderForm({ carModel, carPrice, carId }: OrderFormProps) {
                             onChange={handleChange}
                             required
                             className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                            placeholder="+213 555 123 456"
+                            placeholder="votre numéro"
                         />
                     </div>
 
