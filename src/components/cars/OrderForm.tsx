@@ -160,7 +160,7 @@ export function OrderForm({ carModel, variants, colors, selectedVariant, onVaria
                             onChange={handleChange}
                             required
                             className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                            placeholder="+213 555 123 456"
+                            placeholder="votre numéro"
                         />
                     </div>
 
