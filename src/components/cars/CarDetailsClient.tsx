@@ -294,11 +294,17 @@ export function CarDetailsClient({ carId }: CarDetailsClientProps) {
                                                 
                                                 <div className="text-left sm:text-right w-full sm:w-auto border-t sm:border-none pt-4 sm:pt-0 border-gray-200">
                                                     <div className="font-black text-secondary text-3xl whitespace-nowrap">
-                                                        {variant.price.toLocaleString()} <span className="text-xl font-semibold text-muted-foreground">DZD</span>
+                                                        {(variant.price + variant.taxe_price).toLocaleString()} <span className="text-xl font-semibold text-muted-foreground">DZD</span>
                                                     </div>
-                                                    <div className="text-sm font-medium text-muted-foreground mt-1 flex items-center sm:justify-end gap-1.5">
-                                                        <Receipt className="h-4 w-4 text-secondary/60" /> Frais douane inclus : <strong className="text-secondary">{variant.taxe_price.toLocaleString()} DZD</strong>
+                                                    <div className="flex flex-wrap sm:justify-end mt-2 md:mt-1.5 gap-x-4 gap-y-1">
+                                                        <div className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
+                                                            <CarFront className="h-4 w-4 text-secondary/50" /> Prix arrivé : <strong className="text-secondary">{variant.price.toLocaleString()} DZD</strong>
+                                                        </div>
+                                                        <div className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
+                                                            <Receipt className="h-4 w-4 text-secondary/50" /> Frais douane : <strong className="text-secondary">{variant.taxe_price.toLocaleString()} DZD</strong>
+                                                        </div>
                                                     </div>
+                                                    
                                                     {isSelected && (
                                                         <div className="text-sm font-bold text-primary mt-2 flex items-center sm:justify-end gap-1.5 bg-primary/10 w-fit sm:ml-auto px-2 py-0.5 rounded text-secondary">
                                                             <Check className="h-4 w-4" /> Sélectionné

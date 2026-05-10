@@ -211,7 +211,7 @@ export default function ContactPage() {
                                                         onChange={handleChange}
                                                         required
                                                         className="border-gray-300 focus:border-primary focus:ring-primary"
-                                                        placeholder="+213 555 123 456"
+                                                        placeholder="05 55 123 456"
                                                     />
                                                 </div>
                                                 <div className="space-y-2">

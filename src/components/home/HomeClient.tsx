@@ -121,8 +121,8 @@ export default function HomeClient({
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
                             { icon: Shield, title: "Garantie Complète", desc: "Tous nos véhicules sont vérifiés et garantis pour votre tranquillité d'esprit.", delay: "0ms" },
-                            { icon: Zap, title: "Livraison Rapide", desc: "Importation et livraison en 4-6 semaines seulement.", delay: "100ms" },
-                            { icon: Globe, title: "Réseau International", desc: "Accès à plus de 15 pays pour trouver votre véhicule idéal.", delay: "200ms" }
+                            { icon: Zap, title: "Livraison Rapide", desc: "Importation et livraison en 8-10 semaines seulement.", delay: "100ms" },
+                            { icon: Globe, title: "Réseau International", desc: "Accès à plusieurs pays pour trouver votre véhicule idéal.", delay: "200ms" }
                         ].map((feature, idx) => (
                             <div
                                 key={idx}
