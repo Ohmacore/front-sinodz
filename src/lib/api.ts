@@ -7,20 +7,38 @@ const MOCK_CARS: Car[] = [
     {
         id: 1,
         model: "Mock Car",
-        year: 2023,
-        color: "Black",
         transmission: "Automatic",
         fuelType: "Gasoline",
         engine: "2.0L",
-        mileage: 10000,
-        price: 25000,
-        delivery_price: 500,
-        features: [],
-        isAvailable: 1,
+        isAvailable: "Disponible",
         location: "Algiers",
         brand_id: 1,
         brand: { id: 1, name: "Mock Brand" },
+        colors: ["Black", "Silver"],
+        features: [],
         images: [],
+        variants: [
+            {
+                id: 1,
+                car_model_id: 1,
+                color: "Black",
+                year: 2023,
+                condition: "neuf",
+                mileage: 0,
+                price: 25000,
+                taxe_price: 500,
+            },
+            {
+                id: 2,
+                car_model_id: 1,
+                color: "Silver",
+                year: 2022,
+                condition: "occasion",
+                mileage: 15000,
+                price: 26000,
+                taxe_price: 500,
+            },
+        ],
     }
 ];
 
@@ -29,7 +47,9 @@ const MOCK_COMMANDS: { [key: string]: Command } = {
         id: 1,
         commandNumber: "CMD123",
         client_id: 1,
-        car_model_id: 1,
+        car_variant_id: 1,
+        color: "Black",
+        partner_id: null,
         status: "Pending",
         totalPrice: 25500,
         deposit: 5000,
@@ -48,7 +68,17 @@ const MOCK_COMMANDS: { [key: string]: Command } = {
             email: "john.doe@example.com",
             wilaya: "Algiers",
         },
-        car_model: MOCK_CARS[0],
+        car_variant: {
+            id: 1,
+            car_model_id: 1,
+            color: "Black",
+            year: 2023,
+            condition: "neuf",
+            mileage: 0,
+            price: 25000,
+            taxe_price: 500,
+            car_model: MOCK_CARS[0],
+        },
         container: null,
     }
 };
@@ -111,10 +141,6 @@ export async function getCar(id: number): Promise<Car | undefined> {
         return MOCK_CARS.find(c => c.id === id);
     }
 
-    // Assuming there's an endpoint for single car, or we filter from list if not
-    // The docs didn't explicitly show GET /cars/{id}, but it's standard. 
-    // If not, we might need to fetch all and find.
-    // For now, let's try a direct fetch if real API existed.
     const res = await fetch(`${API_BASE_URL}/cars/${id}`);
     if (!res.ok) return undefined;
     const json = await res.json();

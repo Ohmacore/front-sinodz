@@ -9,8 +9,6 @@ export interface Feature {
   id: number;
   name: string;
   description: string;
-  created_at?: string;
-  updated_at?: string;
 }
 
 export interface CarImage {
@@ -18,6 +16,17 @@ export interface CarImage {
   car_model_id: number;
   image: string;
   order: number;
+}
+
+export interface CarVariant {
+  id: number;
+  car_model_id: number;
+  color: string;
+  year: number;
+  condition: string;
+  mileage: number;
+  price: number;
+  taxe_price: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -25,22 +34,19 @@ export interface CarImage {
 export interface Car {
   id: number;
   model: string;
-  year: number;
-  color: string;
   transmission: string;
   fuelType: string;
   engine: string;
-  mileage: number;
-  price: number;
-  delivery_price: number;
-  features: Feature[];
-  isAvailable: number | boolean; // API says 1, but boolean is easier to work with if transformed
+  isAvailable: string;
   location: string;
   created_at?: string;
   updated_at?: string;
   brand_id: number;
   brand: Brand;
+  colors: string[];
+  features: Feature[];
   images: CarImage[];
+  variants: CarVariant[];
 }
 
 export interface Client {
@@ -48,8 +54,8 @@ export interface Client {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  address: string;
-  email: string;
+  address?: string;
+  email?: string;
   wilaya: string;
   created_at?: string;
   updated_at?: string;
@@ -77,7 +83,9 @@ export interface Command {
   id: number;
   commandNumber: string;
   client_id: number;
-  car_model_id: number;
+  car_variant_id: number;
+  color: string | null;
+  partner_id: number | null;
   status: string;
   totalPrice: number;
   deposit: number;
@@ -90,7 +98,9 @@ export interface Command {
   created_at?: string;
   updated_at?: string;
   client: Client;
-  car_model: Car;
+  car_variant: CarVariant & {
+    car_model?: Car;
+  };
   container: Container | null;
 }
 
@@ -99,5 +109,8 @@ export interface CommandRequest {
   lastName: string;
   phoneNumber: string;
   wilaya: string;
-  vehicule_id: number;
+  car_variant_id: number;
+  address?: string;
+  color?: string;
+  partner_code?: string;
 }

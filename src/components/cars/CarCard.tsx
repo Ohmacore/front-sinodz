@@ -5,12 +5,18 @@ import { Car } from "@/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Fuel, Gauge, Settings2, ChevronLeft, ChevronRight, MapPin, ArrowRight } from "lucide-react";
+import { Fuel, Settings2, ChevronLeft, ChevronRight, MapPin, ArrowRight, Palette } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 interface CarCardProps {
     car: Car;
+}
+
+/** Get the starting (minimum) price from a car's variants */
+function getStartingPrice(car: Car): number | null {
+    if (!car.variants || car.variants.length === 0) return null;
+    return Math.min(...car.variants.map(v => v.price));
 }
 
 export function CarCard({ car }: CarCardProps) {
@@ -28,6 +34,9 @@ export function CarCard({ car }: CarCardProps) {
         e.stopPropagation();
         setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
     };
+
+    const startingPrice = getStartingPrice(car);
+    const isAvailable = car.isAvailable?.toLowerCase() === "disponible";
 
     return (
         <Card className="group overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-2xl bg-white hover:-translate-y-2">
@@ -73,7 +82,7 @@ export function CarCard({ car }: CarCardProps) {
                     </>
                 )}
 
-                {car.isAvailable ? (
+                {isAvailable ? (
                     <Badge className="absolute top-4 right-4 bg-green-500 text-white hover:bg-green-600 font-semibold shadow-lg">
                         Disponible
                     </Badge>
@@ -94,24 +103,28 @@ export function CarCard({ car }: CarCardProps) {
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <MapPin className="h-3.5 w-3.5" />
                             <span>{car.location}</span>
-                            <span className="mx-1">•</span>
-                            <span>{car.year}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Price with professional styling */}
                 <div className="mb-4 pb-4 border-b border-gray-100">
-                    <div className="text-3xl font-bold text-secondary">
-                        {(car.price).toLocaleString()} DZD
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">Prix arrivé en Algérie</div>
+                    {startingPrice !== null ? (
+                        <>
+                            <div className="text-sm text-muted-foreground mb-0.5">À partir de</div>
+                            <div className="text-3xl font-bold text-secondary">
+                                {startingPrice.toLocaleString()} DZD
+                            </div>
+                        </>
+                    ) : (
+                        <div className="text-lg text-muted-foreground">Prix sur demande</div>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-gray-50 border border-gray-100 group-hover:bg-gray-100 transition-colors">
-                        <Gauge className="h-4 w-4 text-secondary" />
-                        <span className="font-medium text-secondary">{car.mileage.toLocaleString()} km</span>
+                        <Palette className="h-4 w-4 text-secondary" />
+                        <span className="font-medium text-secondary">{car.colors?.length || 0} couleurs</span>
                     </div>
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-gray-50 border border-gray-100 group-hover:bg-gray-100 transition-colors">
                         <Settings2 className="h-4 w-4 text-secondary" />

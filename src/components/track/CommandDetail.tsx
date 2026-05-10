@@ -71,6 +71,9 @@ export function CommandDetail({ command }: CommandDetailProps) {
     const balance = command.totalPrice - command.deposit;
     const progress = (command.deposit / command.totalPrice) * 100;
 
+    // Access the car model through the variant relationship
+    const carModel = command.car_variant?.car_model;
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
             {/* Header */}
@@ -185,37 +188,48 @@ export function CommandDetail({ command }: CommandDetailProps) {
                                 <div className="space-y-4">
                                     <div>
                                         <h3 className="text-2xl font-bold text-secondary">
-                                            {command.car_model.brand.name} {command.car_model.model}
+                                            {carModel ? `${carModel.brand.name} ${carModel.model}` : "Véhicule"}
                                         </h3>
-                                        <p className="text-muted-foreground">Année {command.car_model.year}</p>
                                     </div>
 
                                     <Separator />
 
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        {command.color && (
+                                            <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Couleur</p>
+                                                <p className="font-medium">{command.color}</p>
+                                            </div>
+                                        )}
+                                        {command.car_variant?.color && !command.color && (
+                                            <div>
+                                                <p className="text-sm text-muted-foreground mb-1">Variante</p>
+                                                <p className="font-medium">{command.car_variant.color}</p>
+                                            </div>
+                                        )}
+                                        {carModel && (
+                                            <>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground mb-1">Transmission</p>
+                                                    <p className="font-medium capitalize">{carModel.transmission}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground mb-1">Carburant</p>
+                                                    <p className="font-medium capitalize">{carModel.fuelType}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground mb-1">Moteur</p>
+                                                    <p className="font-medium">{carModel.engine}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground mb-1">Localisation</p>
+                                                    <p className="font-medium">{carModel.location}</p>
+                                                </div>
+                                            </>
+                                        )}
                                         <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Couleur</p>
-                                            <p className="font-medium">{command.car_model.color}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Transmission</p>
-                                            <p className="font-medium capitalize">{command.car_model.transmission}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Carburant</p>
-                                            <p className="font-medium capitalize">{command.car_model.fuelType}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Moteur</p>
-                                            <p className="font-medium">{command.car_model.engine}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Kilométrage</p>
-                                            <p className="font-medium">{command.car_model.mileage.toLocaleString()} km</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-muted-foreground mb-1">Localisation</p>
-                                            <p className="font-medium">{command.car_model.location}</p>
+                                            <p className="text-sm text-muted-foreground mb-1">Prix variante</p>
+                                            <p className="font-medium">{command.car_variant?.price?.toLocaleString()} DZD</p>
                                         </div>
                                     </div>
 
@@ -365,10 +379,12 @@ export function CommandDetail({ command }: CommandDetailProps) {
                                     <p className="text-sm text-muted-foreground mb-1">Nom complet</p>
                                     <p className="font-medium">{command.client.firstName} {command.client.lastName}</p>
                                 </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground mb-1">Email</p>
-                                    <p className="font-medium text-sm">{command.client.email}</p>
-                                </div>
+                                {command.client.email && (
+                                    <div>
+                                        <p className="text-sm text-muted-foreground mb-1">Email</p>
+                                        <p className="font-medium text-sm">{command.client.email}</p>
+                                    </div>
+                                )}
                                 <div>
                                     <p className="text-sm text-muted-foreground mb-1">Téléphone</p>
                                     <p className="font-medium">{command.client.phoneNumber}</p>
@@ -379,7 +395,9 @@ export function CommandDetail({ command }: CommandDetailProps) {
                                         <MapPin className="h-3 w-3" />
                                         Adresse
                                     </p>
-                                    <p className="font-medium text-sm">{command.client.address}</p>
+                                    {command.client.address && (
+                                        <p className="font-medium text-sm">{command.client.address}</p>
+                                    )}
                                     <p className="text-sm text-muted-foreground mt-1">{command.client.wilaya}</p>
                                 </div>
                             </CardContent>

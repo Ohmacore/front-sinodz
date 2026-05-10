@@ -11,6 +11,12 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Car } from "@/types";
 import { getCars } from "@/lib/api";
 
+/** Get the minimum variant price for a car, or 0 if no variants */
+function getMinPrice(car: Car): number {
+    if (!car.variants || car.variants.length === 0) return 0;
+    return Math.min(...car.variants.map(v => v.price));
+}
+
 interface CarsClientProps {
     cars?: Car[];
     location?: string;
@@ -70,18 +76,19 @@ export default function CarsClient({
 
     const maxPrice = useMemo(() => {
         if (cars.length === 0) return 1000000000;
-        return Math.max(...cars.map(car => car.price));
+        const prices = cars.map(getMinPrice).filter(p => p > 0);
+        return prices.length > 0 ? Math.max(...prices) : 1000000000;
     }, [cars]);
 
     const filteredCars = useMemo(() => {
         return cars.filter(car => {
-            const totalPrice = car.price;
+            const minPrice = getMinPrice(car);
             const matchesSearch = car.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 car.brand.name.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesBrand = selectedBrand === "all" || car.brand.name === selectedBrand;
             const matchesFuel = selectedFuelType === "all" || car.fuelType === selectedFuelType;
             const matchesTransmission = selectedTransmission === "all" || car.transmission === selectedTransmission;
-            const matchesPrice = totalPrice >= priceRange[0] && totalPrice <= priceRange[1];
+            const matchesPrice = minPrice === 0 || (minPrice >= priceRange[0] && minPrice <= priceRange[1]);
 
             return matchesSearch && matchesBrand && matchesFuel && matchesTransmission && matchesPrice;
         });
