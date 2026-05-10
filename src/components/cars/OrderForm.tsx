@@ -133,7 +133,7 @@ export function OrderForm({ carModel, variants, colors, selectedVariant, onVaria
                                 onChange={handleChange}
                                 required
                                 className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                                placeholder="Mohamed"
+                                placeholder="Votre Prenom"
                             />
                         </div>
                         <div className="space-y-2">
@@ -145,7 +145,7 @@ export function OrderForm({ carModel, variants, colors, selectedVariant, onVaria
                                 onChange={handleChange}
                                 required
                                 className="bg-white border-gray-300 text-gray-900 focus:border-secondary focus:ring-secondary"
-                                placeholder="KBIR"
+                                placeholder="Votre Nom"
                             />
                         </div>
                     </div>
