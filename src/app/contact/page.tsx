@@ -98,10 +98,10 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="font-bold text-secondary mb-2">Email</h3>
                                         <a
-                                            href="mailto:sinodz.import@gmail.com"
+                                            href="mailto:Contact@axisconnect.com"
                                             className="text-sm text-muted-foreground hover:text-primary transition-colors"
                                         >
-                                            sinodz.import@gmail.com
+                                            Contact@axisconnect.com
                                         </a>
                                     </div>
                                 </div>
