@@ -211,12 +211,12 @@ export function OrderForm({ carModel, variants, colors, selectedVariant, onVaria
                                     }
                                 }}
                                 required
-                                className="w-full px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary"
+                                className="w-full px-3 py-2 rounded-md bg-white border border-gray-300 text-xs sm:text-sm md:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary"
                             >
                                 <option value="">Sélectionnez un véhicule...</option>
                                 {variants.map((variant) => (
                                     <option key={variant.id} value={variant.id}>
-                                        {formatCondition(variant.condition)} · {variant.year} · {variant.color} · {variant.mileage.toLocaleString()} km — {variant.price.toLocaleString()} DZD
+                                        {formatCondition(variant.condition)} | {variant.year} | {variant.color} | {variant.mileage.toLocaleString()} km | Total: {(variant.price + variant.taxe_price).toLocaleString()} DZD
                                     </option>
                                 ))}
                             </select>
@@ -261,8 +261,8 @@ export function OrderForm({ carModel, variants, colors, selectedVariant, onVaria
                         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                             <p className="text-sm text-muted-foreground mb-2 font-semibold">Récapitulatif</p>
                             <div className="flex justify-between items-center">
-                                <span className="text-secondary font-medium">{carModel} — {selectedVariant.color}</span>
-                                <span className="font-bold text-secondary">{selectedVariant.price.toLocaleString()} DZD</span>
+                                <span className="text-secondary font-medium">{carModel} | {selectedVariant.color}</span>
+                                <span className="font-bold text-secondary">Total: {(selectedVariant.price + selectedVariant.taxe_price).toLocaleString()} DZD</span>
                             </div>
                         </div>
                     )}
